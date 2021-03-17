@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<script src="./index.js"></script>
+	<!-- 测试shallowReactive和reactive -->
+	<script type="text/javascript">
+		const proxyUser1 = shallowReactive({
+			name: 'xm',
+			car: {
+				color: 'red'
+			}
+		})
+		// 拦截到了写的数据
+		// proxyUser1.name = 'xh'
+		// 拦截到了读和写的数据
+		// proxyUser1.name += '=='
+		// 拦截到了读的数据,但是拦截不到写的数据
+		// proxyUser1.car.color = '**'
+		// 拦截到了读的数据,但是拦截不到写的数据
+		// proxyUser1.car.color += '**'
+		// 拦截到了删除的数据
+		// delete proxyUser1.name
+		// 拦截到了读的数据,但是拦截不到删除的数据
+		// delete proxyUser1.car.color
+
+		const proxyUser2 = reactive({
+			name: 'xm',
+			car: {
+				color: 'red'
+			}
+		})
+		// 拦截到了写的数据
+		// proxyUser2.name = 'xh'
+		// 拦截到了读和写的数据
+		// proxyUser2.name += '=='
+		// 拦截到了读和写的数据
+		// proxyUser2.car.color = '=='
+		// 拦截到了读和写的数据
+		// proxyUser2.car.color += '**'
+		// 拦截到了删除的数据
+		// delete proxyUser2.name
+		// 拦截到了读和删除的数据
+		// delete proxyUser2.car.color
+
+	</script>
+	
+	<!-- 测试shallowReadonly和readonly -->
+	<script type="text/javascript">
+		const proxyUser3 = shallowReadonly({
+			name: 'xw',
+			cars: ['奔驰', '宝马']
+		})
+		// 可以读取
+		// console.log(proxyUser3.name);
+		// 不能修改
+		// proxyUser3.name = '=='
+		// 不能删除
+		// delete proxyUser3.name
+		// 拦截到了读取,拦截不了深度的修改,可以修改
+		// proxyUser3.cars[0] = 'audi'
+		// 拦截到了读取,拦截不了深度的删除,可以删除
+		// delete proxyUser3.cars[0]	
+
+		const proxyUser4 = readonly({
+			name: 'xw',
+			cars: ['奔驰', '宝马']
+		})
+		// 拦截到了读取
+		// console.log(proxyUser4.name);
+		// 拦截到了读取
+		// console.log(proxyUser4.cars[0]);
+		// 只读的,不能修改
+		// proxyUser4.name = '哈哈'
+		// 只读的,不能修改
+		// proxyUser4.cars[0] = '哈哈'
+		// 只读的,不能删除
+		// delete proxyUser4.name
+		// 拦截到了读取,不能修改
+		// proxyUser4.cars[0] = 'audi'
+		// 拦截到了读取,不能删除
+		// delete proxyUser4.cars[0]	
+
+	</script>
+	
+	<!-- 测试shallowRef和ref -->
+	<script type="text/javascript">
+		const ref1 = shallowRef({
+			name: 'xm',
+			car: {
+				color: 'red'
+			}
+		})
+		// 劫持到了读取数据
+		// console.log(ref1.value);
+		// 劫持到了修改数据
+		// ref1.value = '=='
+		// 劫持到了读取数据,劫持不到修改数据
+		// ref1.value.car = '=='
+		
+		const ref2 = ref({
+			name: 'xm',
+			car: {
+				color: 'red'
+			}
+		})
+		// 劫持到了读取数据
+		// console.log(ref2.value);
+		// 劫持到了修改数据
+		// ref2.value = '=='
+		// 劫持到了读取数据和修改数据
+		// ref2.value.car = '=='
+	</script>
+
+	<!-- 测试isRef(),isReactive(),isReadonly(),isProxy -->
+	<script type="text/javascript">
+		console.log(isRef(ref({})));
+		console.log(isReactive(reactive({})));
+		console.log(isReadonly(readonly({})));
+		console.log(isProxy(reactive({})));
+		console.log(isProxy(readonly({})));
+		console.log(isProxy(ref({})));
+	</script>
+</body>
+</html>
